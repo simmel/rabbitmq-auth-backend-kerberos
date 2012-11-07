@@ -10,7 +10,7 @@ description() ->
     {description, <<"Kerberos authentication">>}].
 
 check_user_login(Username, AuthProps) ->
-  true.
+  {'ok', Username}.
 
 check_vhost_access(#user{username = Username}, VHost) ->
   true.
