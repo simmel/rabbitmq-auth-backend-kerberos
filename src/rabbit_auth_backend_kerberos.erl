@@ -11,7 +11,7 @@ description() ->
 
 check_user_login(Username, AuthProps) ->
   {ok, #user{username     = Username,
-      tags         = none,
+      tags         = [],
       auth_backend = ?MODULE,
       impl         = none}}.
 
