@@ -10,10 +10,20 @@ description() ->
     {description, <<"Kerberos authentication">>}].
 
 check_user_login(Username, AuthProps) ->
-  {ok, #user{username     = Username,
-      tags         = [],
-      auth_backend = ?MODULE,
-      impl         = none}}.
+  Kinit = kinit(Username, none),
+  rabbit_log:error("kinit: ~p!~n", [Kinit]),
+  case Kinit of
+    true ->
+      {ok, #user{username     = Username,
+          tags         = [],
+          auth_backend = ?MODULE,
+          impl         = none}};
+    false ->
+      {refused, "Nope", []};
+    {error, Error} ->
+      rabbit_log:error("Error from kinit: ~p!~n", [Error]),
+      {refused, "Error", []}
+  end.
 
 check_vhost_access(#user{username = Username}, VHost) ->
   true.
@@ -22,3 +32,24 @@ check_resource_access(#user{username = Username},
   #resource{virtual_host = VHost, kind = Type, name = Name},
   Permission) ->
   true.
+
+% TODO Fault tolerance:
+% * What if spawned binary doesn't exist?
+% * Isn't executable?
+kinit(_,_) ->
+  Port = open_port({spawn_executable, "/bin/true"}, [exit_status]),
+
+  receive
+    {Port, {exit_status, 0}} ->
+      rabbit_log:error("exit_status: 0~n"),
+      true;
+    {Port, {exit_status, 1}} ->
+      rabbit_log:error("exit_status: 1~n"),
+      false;
+    {Port, {exit_status, A}} ->
+      rabbit_log:error("exit_status: ~s~n", [A]),
+      {error, A}
+  after
+    5000 ->
+      {error, timeout}
+  end.
