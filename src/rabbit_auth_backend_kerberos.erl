@@ -38,16 +38,24 @@ check_resource_access(#user{username = Username},
 % * Isn't executable?
 kinit(_,_) ->
   Port = open_port({spawn_executable, "/bin/true"}, [exit_status]),
+  loop(Port).
 
+loop(Port) ->
   receive
     {Port, {exit_status, 0}} ->
       rabbit_log:error("exit_status: 0~n"),
+      loop(Port),
       true;
     {Port, {exit_status, 1}} ->
       rabbit_log:error("exit_status: 1~n"),
+      loop(Port),
+      false;
+    {'EXIT', Port, PosixCode} ->
+      rabbit_log:error("EXIT: ~p~n", [PosixCode]),
       false;
     {Port, {exit_status, A}} ->
       rabbit_log:error("exit_status: ~s~n", [A]),
+      loop(Port),
       {error, A}
   after
     5000 ->
