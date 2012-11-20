@@ -3,4 +3,7 @@
   {vsn, "%%VSN%%"},
   {modules, [rabbit_auth_backend_kerberos_app]},
   {registered, []},
+  {env, [
+      {authZ_module, rabbit_auth_backend_internal}
+  ]},
   {applications, [kernel, stdlib, inets]}]}.
