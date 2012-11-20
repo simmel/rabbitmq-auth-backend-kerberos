@@ -10,7 +10,8 @@ description() ->
     {description, <<"Kerberos authentication">>}].
 
 check_user_login(Username, AuthProps) ->
-  Kinit = kinit(Username, none),
+  Password = proplists:get_value(password, AuthProps),
+  Kinit = kinit(Username, Password),
   rabbit_log:error("kinit: ~p!~n", [Kinit]),
   case Kinit of
     true ->
@@ -33,15 +34,31 @@ check_resource_access(#user{username = Username},
   Permission) ->
   true.
 
-% TODO Fault tolerance:
-% * What if spawned binary doesn't exist?
-% * Isn't executable?
-kinit(_,_) ->
-  Port = open_port({spawn_executable, "/bin/true"}, [exit_status]),
+kinit(User,Password) when is_binary(User) ->
+  % On <= R14B args can only be a string()
+  Username = binary_to_list(User),
+  try open_port({spawn_executable, "/bin/true"}, [
+        exit_status,
+        {args, [Username]},
+        {line, 1024}
+      ]) of
+  Port when is_port(Port) -> kinit(Port, Password)
+  catch
+    error:E when E == enoent; E == eacces ->
+      rabbit_log:error("Couldn't execute kinit process: ~p~n", [E]),
+      false
+  end;
+
+kinit(Port, Password) when is_port(Port) ->
+  Port ! {self(), {command, <<Password/binary,"\n">>}},
   loop(Port).
 
 loop(Port) ->
   receive
+    {Port, {data, {_, Data}}} ->
+      % TODO change loglevel
+      rabbit_log:error("~s", [Data]),
+      false;
     {Port, {exit_status, 0}} ->
       rabbit_log:error("exit_status: 0~n"),
       loop(Port),
