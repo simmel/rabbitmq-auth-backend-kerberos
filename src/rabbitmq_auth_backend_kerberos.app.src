@@ -3,5 +3,4 @@
   {vsn, "%%VSN%%"},
   {modules, [rabbit_auth_backend_kerberos_app]},
   {registered, []},
-  {mod, {rabbit_auth_backend_kerberos_app, []}},
   {applications, [kernel, stdlib, inets]}]}.
