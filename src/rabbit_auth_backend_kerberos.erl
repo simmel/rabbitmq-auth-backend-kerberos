@@ -61,20 +61,24 @@ loop(Port) ->
       false;
     {Port, {exit_status, 0}} ->
       rabbit_log:error("exit_status: 0~n"),
-      loop(Port),
-      true;
+      loop(Port, true);
     {Port, {exit_status, 1}} ->
       rabbit_log:error("exit_status: 1~n"),
-      loop(Port),
-      false;
-    {'EXIT', Port, PosixCode} ->
-      rabbit_log:error("EXIT: ~p~n", [PosixCode]),
-      false;
+      loop(Port, false);
     {Port, {exit_status, A}} ->
       rabbit_log:error("exit_status: ~s~n", [A]),
-      loop(Port),
-      {error, A}
+      loop(Port, {error, A})
   after
     5000 ->
+      {error, timeout}
+  end.
+
+loop(Port, Return) when is_boolean(Return); is_tuple(Return) ->
+  receive
+    {'EXIT', Port, PosixCode} ->
+      rabbit_log:error("EXIT: ~p~n", [PosixCode]),
+      Return
+  after
+    1000 ->
       {error, timeout}
   end.
