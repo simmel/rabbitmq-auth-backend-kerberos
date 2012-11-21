@@ -75,8 +75,8 @@ loop(Port) ->
 
 loop(Port, Return) when is_boolean(Return); is_tuple(Return) ->
   receive
-    {'EXIT', Port, PosixCode} ->
-      rabbit_log:error("EXIT: ~p~n", [PosixCode]),
+    {'EXIT', Port, Reason} ->
+      rabbit_log:error("EXIT: ~p~n", [Reason]),
       Return
   after
     1000 ->
