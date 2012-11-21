@@ -21,9 +21,9 @@ http://www.rabbitmq.com/plugin-development.html).
 Enabling the plugin
 ===================
 
-To enable the plugin, set the value of the "auth\_backends" configuration item
-for the "rabbit" application to include "rabbitmq\_auth\_backend\_kerberos".
-"auth\_backends" is a list of authentication providers to try in order.
+To enable the plugin, set the value of the ```auth_backends``` configuration item
+for the ```rabbit``` application to include ```rabbitmq_auth_backend_kerberos```.
+```auth_backends``` is a list of authentication providers to try in order.
 
 Therefore a complete RabbitMQ configuration that enables this plugin would
 look like:
