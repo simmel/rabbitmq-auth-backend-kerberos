@@ -26,21 +26,13 @@ for the ```rabbit``` application to include ```rabbitmq_auth_backend_kerberos```
 ```auth_backends``` is a list of authentication providers to try in order.
 
 Therefore a complete RabbitMQ configuration that enables this plugin would
-look like:
-
-```erlang
-[{rabbit, [{auth_backends, [rabbitmq_auth_backend_kerberos]}]}].
-```
-
-to use only Kerberos, or:
+look like this:
 
 ```erlang
 [{rabbit,
   [{auth_backends, [rabbitmq_auth_backend_kerberos, rabbit_auth_backend_internal]}]
  }].
 ```
-
-to use Kerberos and the internal database.
 
 Configuring the plugin
 ======================
