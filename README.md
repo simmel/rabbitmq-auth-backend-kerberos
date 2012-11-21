@@ -55,3 +55,14 @@ Example configuration file
   ]}
 ].
 ```
+
+Acknowledgements
+================
+
+Many thanks to:
+
+* [rabbitmq-discuss](https://lists.rabbitmq.com/cgi-bin/mailman/listinfo/rabbitmq-discuss)
+and especially to [Simon MacMullen](https://github.com/simonmacmullen).
+* [#erlang](irc://irc.freenode.net/erlang)
+
+All in all, a very helpful and supportive community!
