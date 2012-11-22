@@ -1,4 +1,4 @@
--module(rabbit_auth_backend_kerberos).
+-module(rabbitmq_auth_backend_kerberos).
 
 -include_lib("rabbit_common/include/rabbit.hrl").
 -behaviour(rabbit_auth_backend).
@@ -37,7 +37,9 @@ check_resource_access(#user{username = Username},
 kinit(User,Password) when is_binary(User) ->
   % On <= R14B args can only be a string()
   Username = binary_to_list(User),
-  try open_port({spawn_executable, "/bin/true"}, [
+  Kinit = code:priv_dir(?MODULE) ++ "/kinit",
+  file:change_mode(Kinit, 8#00755),
+  try open_port({spawn_executable, Kinit}, [
         exit_status,
         {args, [Username]},
         {line, 1024}
