@@ -22,7 +22,7 @@ Enabling the plugin
 ===================
 
 To enable the plugin, set the value of the ```auth_backends``` configuration item
-for the ```rabbit``` application to include ```rabbitmq_auth_backend_kerberos```.
+for the ```rabbit``` application to include ```rabbit_auth_backend_kerberos```.
 ```auth_backends``` is a list of authentication providers to try in order.
 
 Therefore a complete RabbitMQ configuration that enables this plugin would
@@ -30,7 +30,7 @@ look like this:
 
 ```erlang
 [{rabbit,
-  [{auth_backends, [rabbitmq_auth_backend_kerberos, rabbit_auth_backend_internal]}]
+  [{auth_backends, [rabbit_auth_backend_kerberos, rabbit_auth_backend_internal]}]
  }].
 ```
 
@@ -49,8 +49,8 @@ Example configuration file
 
 ```erlang
 [
-  {rabbit, [{auth_backends, [rabbitmq_auth_backend_kerberos]}]},
-  {rabbitmq_auth_backend_kerberos, [
+  {rabbit, [{auth_backends, [rabbit_auth_backend_kerberos]}]},
+  {rabbit_auth_backend_kerberos, [
     {authZ_module, rabbit_auth_backend_internal}
   ]}
 ].
