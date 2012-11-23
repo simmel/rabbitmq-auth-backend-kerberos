@@ -14,12 +14,13 @@ description() ->
 check_user_login(Username, AuthProps) ->
   Password = proplists:get_value(password, AuthProps),
   Kinit = kinit(Username, Password),
+  {ok, AuthZ_module} = application:get_env(?APPLICATION, authZ_module),
   rabbit_log:error("kinit: ~p!~n", [Kinit]),
   case Kinit of
     true ->
       {ok, #user{username     = Username,
           tags         = [],
-          auth_backend = ?MODULE,
+          auth_backend = AuthZ_module,
           impl         = none}};
     false ->
       {refused, "Nope", []};
