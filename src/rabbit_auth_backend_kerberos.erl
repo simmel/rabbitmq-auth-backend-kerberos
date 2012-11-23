@@ -1,7 +1,9 @@
--module(rabbitmq_auth_backend_kerberos).
+-module(rabbit_auth_backend_kerberos).
 
 -include_lib("rabbit_common/include/rabbit.hrl").
 -behaviour(rabbit_auth_backend).
+
+-define(APPLICATION, list_to_atom(re:replace(atom_to_list(?MODULE), "^rabbit_", "rabbitmq_", [{return, list}]))).
 
 -export([description/0, check_user_login/2, check_vhost_access/2, check_resource_access/3]).
 
@@ -37,7 +39,7 @@ check_resource_access(#user{username = Username},
 kinit(User,Password) when is_binary(User) ->
   % On <= R14B args can only be a string()
   Username = binary_to_list(User),
-  Kinit = code:priv_dir(?MODULE) ++ "/kinit",
+  Kinit = code:priv_dir(?APPLICATION) ++ "/kinit",
   file:change_mode(Kinit, 8#00755),
   try open_port({spawn_executable, Kinit}, [
         exit_status,
