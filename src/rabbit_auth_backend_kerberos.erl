@@ -3,9 +3,13 @@
 -include_lib("rabbit_common/include/rabbit.hrl").
 -behaviour(rabbit_auth_backend).
 
--define(APPLICATION, list_to_atom(re:replace(atom_to_list(?MODULE), "^rabbit_", "rabbitmq_", [{return, list}]))).
+-define(APPLICATION, get_application()).
 
 -export([description/0, check_user_login/2, check_vhost_access/2, check_resource_access/3]).
+
+get_application() ->
+  {ok, Application} = application:get_application(?MODULE),
+  Application.
 
 description() ->
   [{name, <<"Kerberos">>},
