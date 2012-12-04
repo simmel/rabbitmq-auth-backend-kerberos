@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 
+void secure_zero(void *s, size_t n) {
+  volatile char *p = s;
+  while (n--) *p++ = 0;
+}
+
 int main(int argc, char **argv) {
   krb5_error_code error;
   krb5_principal  principal;
@@ -44,9 +49,12 @@ int main(int argc, char **argv) {
     krb5_err(context, 1, error, "krb5_get_init_creds_password");
   }
 
+  /* Zero out password securely since memset can get optimized away if compiled
+   * with -01 or higher and not being used afterwards. */
+  secure_zero(password, sizeof(password));
+
   krb5_free_cred_contents(context, &creds);
   krb5_free_principal(context, principal);
-  // TODO Erase password
 
 free_context:
   krb5_free_context(context);
