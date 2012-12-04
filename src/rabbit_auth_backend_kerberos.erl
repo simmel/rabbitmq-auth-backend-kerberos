@@ -51,14 +51,14 @@ kinit(User, Password) when is_binary(User) ->
         {args, [Username]},
         {line, 1024}
       ]) of
-  Port when is_port(Port) -> kinit(Port, Password)
+  Port when is_port(Port) -> kinit(Port, User, Password)
   catch
     error:E when E == enoent; E == eacces ->
       rabbit_log:error("Couldn't execute kinit process: ~p~n", [E]),
       false
-  end;
+  end.
 
-kinit(Port, Password) when is_port(Port) ->
+kinit(Port, User, Password) when is_port(Port) ->
   Port ! {self(), {command, <<Password/binary,"\n">>}},
   loop(Port).
 
