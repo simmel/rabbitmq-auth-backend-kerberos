@@ -48,6 +48,7 @@ kinit(User, Password) when is_binary(User) ->
   file:change_mode(Kinit, 8#00755),
   try open_port({spawn_executable, Kinit}, [
         exit_status,
+        eof,
         {args, [Username]},
         {line, 1024}
       ]) of
@@ -60,34 +61,28 @@ kinit(User, Password) when is_binary(User) ->
 
 kinit(Port, User, Password) when is_port(Port) ->
   Port ! {self(), {command, <<Password/binary,"\n">>}},
-  loop(Port).
+  loop(Port, []).
 
-loop(Port) ->
+loop(Port, Acc) ->
   receive
     {Port, {data, {_, Data}}} ->
       % TODO change loglevel
       rabbit_log:error("~s", [Data]),
-      false;
+      loop(Port, [false|Acc]);
     {Port, {exit_status, 0}} ->
       rabbit_log:error("exit_status: 0~n"),
-      loop(Port, true);
+      loop(Port, [true|Acc]);
     {Port, {exit_status, 1}} ->
       rabbit_log:error("exit_status: 1~n"),
-      loop(Port, false);
+      loop(Port, [false|Acc]);
+    {Port, eof} ->
+      rabbit_log:error("eof: ~p~n", [Acc]),
+      [Return|_] = Acc,
+      Return;
     {Port, {exit_status, A}} ->
       rabbit_log:error("exit_status: ~s~n", [A]),
-      loop(Port, {error, A})
+      loop(Port, [{error, A}|Acc])
   after
     5000 ->
-      {error, timeout}
-  end.
-
-loop(Port, Return) when is_boolean(Return); is_tuple(Return) ->
-  receive
-    {'EXIT', Port, Reason} ->
-      rabbit_log:error("EXIT: ~p~n", [Reason]),
-      Return
-  after
-    1000 ->
-      {error, timeout}
+      [{error, timeout}|Acc]
   end.
