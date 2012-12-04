@@ -6,7 +6,8 @@ C_SOURCE:=$(wildcard $(C_SOURCE_DIR)/*.c)
 
 CC ?= gcc
 CFLAGS ?=
-CC_OPTS:=-g -Wall -pedantic -std=c99 -O2 -fpic $(CFLAGS)
+LDFLAGS ?=
+CC_OPTS:=-g -Wall -pedantic -std=c99 -O2 -fpic -lkrb5 $(CFLAGS) $(LDFLAGS)
 
 CONSTRUCT_APP_PREREQS:=$(BINARY)
 define construct_app_commands
