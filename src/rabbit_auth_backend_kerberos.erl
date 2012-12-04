@@ -37,7 +37,11 @@ check_resource_access(#user{username = Username},
   Permission) ->
   true.
 
-kinit(User,Password) when is_binary(User) ->
+% Needed because 2.x uses an undefined password sometimes
+% See http://article.gmane.org/gmane.comp.networking.rabbitmq.general/20092
+kinit(User, Password) when Password =:= undefined -> false;
+
+kinit(User, Password) when is_binary(User) ->
   % On <= R14B args can only be a string()
   Username = binary_to_list(User),
   Kinit = code:priv_dir(?APPLICATION) ++ "/kinit",
