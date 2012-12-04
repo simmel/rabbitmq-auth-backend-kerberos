@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   krb5_error_code error;
   krb5_principal  principal;
   krb5_context    context;
