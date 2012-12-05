@@ -26,7 +26,7 @@ check_user_login(Username, AuthProps) ->
       {refused, "Nope", []};
     {error, Error} ->
       rabbit_log:error("Error from kinit: ~p!~n", [Error]),
-      {refused, "Error", []}
+      {error, "Error", Error}
   end.
 
 check_vhost_access(#user{username = Username}, VHost) ->
