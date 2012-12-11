@@ -1,13 +1,13 @@
 DEPS:=rabbitmq-server rabbitmq-erlang-client
 
 C_SOURCE_DIR:=$(PACKAGE_DIR)/c_src
-BINARY:=$(C_SOURCE_DIR)/kinit
+BINARY:=$(C_SOURCE_DIR)/kinit.so
 C_SOURCE:=$(wildcard $(C_SOURCE_DIR)/*.c)
 
 CC ?= gcc
 CFLAGS ?=
 LDFLAGS ?=
-CC_OPTS:=-g -Wall -pedantic -std=c99 -O2 -fpic -lkrb5 $(CFLAGS) $(LDFLAGS)
+CC_OPTS:=-g -Wall -pedantic -std=c99 -O2 -fPIC -shared $(CFLAGS) $(LDFLAGS)
 
 CONSTRUCT_APP_PREREQS:=$(BINARY)
 define construct_app_commands
