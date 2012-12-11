@@ -5,17 +5,7 @@
 
 -define(APPLICATION, begin {ok, A} = application:get_application(?MODULE), A end).
 
--export([init/0, description/0, check_user_login/2, check_vhost_access/2, check_resource_access/3]).
-
--on_load(init/0).
-
-init() ->
-  Mjao = code:priv_dir(rabbit_auth_backend_kerberos),
-  rabbit_log:error("NEIN: ~p~n", [Mjao]),
-  Kinit = filename:join(code:priv_dir(rabbit_auth_backend_kerberos), "/kinit.so"),
-  erlang:load_nif(Kinit, 0).
-
-kinit(User, Password) -> exit(nif_library_not_loaded).
+-export([description/0, check_user_login/2, check_vhost_access/2, check_resource_access/3]).
 
 description() ->
   [{name, <<"Kerberos">>},
@@ -23,7 +13,7 @@ description() ->
 
 check_user_login(Username, AuthProps) ->
   Password = proplists:get_value(password, AuthProps),
-  Kinit = kinit(Username, Password),
+  Kinit = kinit:kinit(Username, Password),
   {ok, AuthZ_module} = application:get_env(?APPLICATION, authZ_module),
   rabbit_log:error("kinit: ~p ~p!~n", [?APPLICATION, Kinit]),
   case Kinit of

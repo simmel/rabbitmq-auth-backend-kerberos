@@ -9,4 +9,4 @@ static ErlNifFunc nif_funcs[] = {
     {"kinit", 2, kinit}
 };
 
-ERL_NIF_INIT(rabbit_auth_backend_kerberos, nif_funcs, NULL, NULL, NULL, NULL)
+ERL_NIF_INIT(kinit, nif_funcs, NULL, NULL, NULL, NULL)
