@@ -12,9 +12,7 @@ down how to use a different module for authZ.
 
 This plugin will use your systems Kerberos settings.
 
-NOTE: On 2.x this plugin will only work for AMQP connections, but NOT with e.g.
-STOMP, API or management.
-On 3.x works for all connections.
+NOTE: This plugin will only work on >3.x!
 
 Requirements
 ============
