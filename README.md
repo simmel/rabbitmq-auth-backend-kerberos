@@ -66,7 +66,7 @@ Acknowledgements
 Many thanks to:
 
 * [rabbitmq-discuss](https://lists.rabbitmq.com/cgi-bin/mailman/listinfo/rabbitmq-discuss)
-and especially to [Simon MacMullen](https://github.com/simonmacmullen).
+and especially to [Simon MacMullen](https://github.com/simonmacmullen) and [Tim Watson](https://github.com/hyperthunk).
 * [#erlang](irc://irc.freenode.net/erlang)
 * [Magnus Ahltorp](https://github.com/ahltorp) for answering my questions.
 
