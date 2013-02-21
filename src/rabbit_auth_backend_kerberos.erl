@@ -28,7 +28,7 @@ check_user_login(Username, AuthProps) ->
     _ -> []
   end,
   Empty_password = case User_record of
-    {ok, _ = #internal_user{password_hash = P}} when P == <<>> -> true;
+    {ok, _ = #internal_user{password_hash = <<>>}} -> true;
     _ -> false
   end,
   case Kinit of
@@ -37,7 +37,7 @@ check_user_login(Username, AuthProps) ->
                  tags         = Tags,
                  auth_backend = AuthZ_module,
                  impl         = none}};
-    true when not Empty_password ->
+    true ->
       {refused, "Nope", []};
     false ->
       {refused, "Nope", []};
