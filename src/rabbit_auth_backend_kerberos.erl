@@ -22,10 +22,15 @@ check_user_login(Username, AuthProps) ->
   Password = proplists:get_value(password, AuthProps),
   Kinit = kinit(Username, Password),
   {ok, AuthZ_module} = application:get_env(?APPLICATION, authZ_module),
+  User_record = AuthZ_module:lookup_user(Username),
+  Tags = case User_record of
+    {ok, _ = #internal_user{tags = T}} -> T;
+    _ -> []
+  end,
   case Kinit of
     true ->
       {ok, #user{username     = Username,
-                 tags         = [],
+                 tags         = Tags,
                  auth_backend = AuthZ_module,
                  impl         = none}};
     false ->
