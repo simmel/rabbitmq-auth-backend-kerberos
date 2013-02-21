@@ -32,12 +32,14 @@ check_user_login(Username, AuthProps) ->
     _ -> false
   end,
   case Kinit of
-    true when Empty_password == true ->
+    true when Empty_password ->
       {ok, #user{username     = Username,
                  tags         = Tags,
                  auth_backend = AuthZ_module,
                  impl         = none}};
-    false when Empty_password == false ->
+    true when not Empty_password ->
+      {refused, "Nope", []};
+    false ->
       {refused, "Nope", []};
     {error, Error} ->
       rabbit_log:error("Error from kinit: ~p!~n", [Error]),
