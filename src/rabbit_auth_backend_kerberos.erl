@@ -27,13 +27,17 @@ check_user_login(Username, AuthProps) ->
     {ok, _ = #internal_user{tags = T}} -> T;
     _ -> []
   end,
+  Empty_password = case User_record of
+    {ok, _ = #internal_user{password_hash = P}} when P == <<>> -> true;
+    _ -> false
+  end,
   case Kinit of
-    true ->
+    true when Empty_password == true ->
       {ok, #user{username     = Username,
                  tags         = Tags,
                  auth_backend = AuthZ_module,
                  impl         = none}};
-    false ->
+    false when Empty_password == false ->
       {refused, "Nope", []};
     {error, Error} ->
       rabbit_log:error("Error from kinit: ~p!~n", [Error]),
