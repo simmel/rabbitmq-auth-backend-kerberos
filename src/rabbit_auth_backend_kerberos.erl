@@ -12,7 +12,7 @@ init() ->
     Kinit = filename:join(code:priv_dir(?APPLICATION), "kinit"),
     erlang:load_nif(Kinit, 0).
 
-kinit(User, Password) -> exit(nif_library_not_loaded).
+kinit(_, _) -> exit(nif_library_not_loaded).
 
 description() ->
   [{name, <<"Kerberos">>},
@@ -44,10 +44,10 @@ check_user_login(Username, AuthProps) ->
       {refused, "Nope", []}
   end.
 
-check_vhost_access(#user{username = Username}, VHost) ->
+check_vhost_access(#user{username = _}, _) ->
   true.
 
-check_resource_access(#user{username = Username},
-  #resource{virtual_host = VHost, kind = Type, name = Name},
-  Permission) ->
+check_resource_access(#user{username = _},
+  #resource{virtual_host = _, kind = _, name = _},
+  _) ->
   true.
