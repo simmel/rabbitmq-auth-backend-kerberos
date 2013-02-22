@@ -37,11 +37,11 @@ check_user_login(Username, AuthProps) ->
                  tags         = Tags,
                  auth_backend = AuthZ_module,
                  impl         = none}};
-    _ ->
-      {refused, "Nope", []};
     {error, Error} ->
       rabbit_log:error("Error from kinit: ~p!~n", [Error]),
-      {error, "Error", Error}
+      {error, "Error", Error};
+    _ ->
+      {refused, "Nope", []}
   end.
 
 check_vhost_access(#user{username = Username}, VHost) ->
