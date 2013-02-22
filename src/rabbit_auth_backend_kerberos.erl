@@ -37,9 +37,7 @@ check_user_login(Username, AuthProps) ->
                  tags         = Tags,
                  auth_backend = AuthZ_module,
                  impl         = none}};
-    true ->
-      {refused, "Nope", []};
-    false ->
+    _ ->
       {refused, "Nope", []};
     {error, Error} ->
       rabbit_log:error("Error from kinit: ~p!~n", [Error]),
