@@ -1,5 +1,4 @@
 build
 dist
 ebin
-c_src/kinit
-c_src/kinit.dSYM
+c_src/kinit.so*
