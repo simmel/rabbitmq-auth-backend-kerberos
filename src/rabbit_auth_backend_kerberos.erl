@@ -31,17 +31,22 @@ check_user_login(Username, AuthProps) ->
     {ok, _ = #internal_user{password_hash = <<>>}} -> true;
     _ -> false
   end,
-  case Kinit of
-    true when Empty_password ->
-      {ok, #user{username     = Username,
-                 tags         = Tags,
-                 auth_backend = AuthZ_module,
-                 impl         = none}};
-    {error, Error} ->
-      rabbit_log:error("Error from kinit: ~p!~n", [Error]),
-      {error, "Error", Error};
-    _ ->
-      {refused, "Nope", []}
+  case Empty_password of
+    true ->
+      case Kinit of
+        {ok, _} ->
+          {ok, #user{username     = Username,
+              tags         = Tags,
+              auth_backend = AuthZ_module,
+              impl         = none}};
+        {refused, Error} ->
+          {refused, "Nope", Error};
+        {_, Error} ->
+          rabbit_log:error("Error from kinit: ~p!~n", [Error]),
+          {error, Error}
+      end;
+    false ->
+      {refused, "Nope", "User exists in internal database."}
   end.
 
 check_vhost_access(#user{username = _}, _) ->
