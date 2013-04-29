@@ -7,7 +7,7 @@ C_SOURCE:=$(wildcard $(C_SOURCE_DIR)/*.c)
 CC ?= gcc
 CFLAGS ?=
 LDFLAGS ?=
-CC_OPTS:=-g -Wall -pedantic -std=c99 -O2 -fPIC -shared $(CFLAGS) $(LDFLAGS)
+CC_OPTS:=-g -pedantic -Wall -std=c99 $(CFLAGS) -fPIC -shared
 
 CONSTRUCT_APP_PREREQS:=$(BINARY)
 define construct_app_commands
@@ -17,7 +17,7 @@ endef
 
 define package_rules
 $(BINARY): $(C_SOURCE)
-	$(CC) $(CC_OPTS) -o $$@ $(C_SOURCE)
+	$(CC) $(CC_OPTS) -o $$@ $(C_SOURCE) $(LDFLAGS)
 
 $(PACKAGE_DIR)+clean::
 	rm -rf $(BINARY)
