@@ -24,6 +24,41 @@ Requirements
 You can build and install it like any other plugin (see
 http://www.rabbitmq.com/plugin-development.html).
 
+Headers for Heimdal or MIT Kerberos and Erlang is needed to build. So on any
+Debian derived distro that's ```heimdal-dev``` or ```libkrb5-dev``` and
+```erlang-dev```.
+
+Compiling
+=========
+
+The plugin works both with Heimdal and MIT Kerberos.
+
+You need to use ```CFLAGS```and ```LDFLAGS``` when running make.
+When using MIT you need to add ```-DMIT``` too for it to work.
+
+So e.g:
+
+Mac OS X
+--------
+When using Heimdal from http://www.h5l.org and erlang from [Homebrew]:(http://brew.sh):
+```shell
+CFLAGS="-I/usr/heimdal/include -I/usr/local/Cellar/erlang/R15B02/lib/erlang/usr/include/" LDFLAGS="-L/usr/heimdal/lib -lkrb5 -undefined dynamic_lookup -dynamiclib"
+```
+
+Ubuntu 12.04 Precise
+--------------------
+When ```heimdal-dev``` and ```erlang-dev``` is installed:
+```shell
+CFLAGS="-I/usr/lib/erlang/usr/include/ `krb5-config --cflags`" LDFLAGS="`krb5-config --libs krb5`" make dist
+```
+
+OR for MIT Kerberos:
+
+When ```libkrb5-dev``` and ```erlang-dev``` is installed:
+```shell
+CFLAGS="-I/usr/lib/erlang/usr/include/ -DMIT" LDFLAGS="`krb5-config --libs krb5`" make dist
+```
+
 Enabling the plugin
 ===================
 
@@ -44,7 +79,7 @@ Configuring the plugin
 ======================
 
 authZ\_module
--------
+-------------
 
 Default: ```rabbit_auth_backend_internal```
 
