@@ -16,6 +16,8 @@ NOTE: On 2.x this plugin will only work for AMQP connections, but NOT with e.g.
 STOMP, API or management.
 On 3.x works for all connections.
 
+The plugin is BSD-licensed.
+
 Requirements
 ============
 
