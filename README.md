@@ -40,7 +40,7 @@ Mac OS X
 --------
 When using Heimdal from http://www.h5l.org and erlang from [Homebrew]:(http://brew.sh):
 ```shell
-CFLAGS="-I/usr/heimdal/include -I/usr/local/Cellar/erlang/R15B02/lib/erlang/usr/include/" LDFLAGS="-L/usr/heimdal/lib -lkrb5 -undefined dynamic_lookup -dynamiclib"
+CFLAGS="-I/usr/heimdal/include -I/usr/local/Cellar/erlang/R15B02/lib/erlang/usr/include/" LDFLAGS="-L/usr/heimdal/lib -lkrb5 -undefined dynamic_lookup -dynamiclib" make dist
 ```
 
 Ubuntu 12.04 Precise
