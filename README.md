@@ -6,7 +6,6 @@ authentication against an Kerberos KDC.
 
 Since Kerberos is a authentication protocol and cannot do authorization
 this plugin depends on another auth backend to provide authZ.
-
 By default it uses ```rabbit_auth_backend_internal``` for this. See further
 down how to use a different module for authZ.
 
@@ -24,9 +23,8 @@ Requirements
 You can build and install it like any other plugin (see
 http://www.rabbitmq.com/plugin-development.html).
 
-Headers for Heimdal or MIT Kerberos and Erlang is needed to build. So on any
-Debian derived distro that's ```heimdal-dev``` or ```libkrb5-dev``` and
-```erlang-dev```.
+Headers for Heimdal or MIT Kerberos and Erlang are needed to build it. So on
+any Debian derived distro that's ```heimdal-dev``` or ```libkrb5-dev``` and ```erlang-dev```.
 
 Compiling
 =========
