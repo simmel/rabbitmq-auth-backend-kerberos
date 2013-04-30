@@ -63,13 +63,12 @@ check_user_login(Username, AuthProps) ->
               auth_backend = AuthZ_module,
               impl         = none}};
         {refused, Error} ->
-          {refused, "Nope", Error};
-        {_, Error} ->
-          rabbit_log:error("Error from kinit: ~p!~n", [Error]),
-          {error, Error}
+          {refused, Error, []};
+        Error ->
+          Error
       end;
     false ->
-      {refused, "Nope", "User exists in internal database."}
+      {refused, "User '~s' exists in internal database, not authenticating user with Kerberos.", [Username]}
   end.
 
 check_vhost_access(#user{username = _}, _) ->
