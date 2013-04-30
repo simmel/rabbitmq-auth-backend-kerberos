@@ -60,7 +60,8 @@ CFLAGS="-I/usr/lib/erlang/usr/include/ -DMIT" LDFLAGS="`krb5-config --libs krb5`
 Enabling the plugin
 ===================
 
-To enable the plugin, set the value of the ```auth_backends``` configuration item
+* Enable the plugin ```rabbitmq_auth_backend_kerberos```, see http://www.rabbitmq.com/plugins.html
+* To make RabbitMQ use the plugin, set the value of the ```auth_backends``` configuration item
 for the ```rabbit``` application to include ```rabbit_auth_backend_kerberos```.
 ```auth_backends``` is a list of authentication providers to try in order.
 
