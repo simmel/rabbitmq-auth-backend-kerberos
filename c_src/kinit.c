@@ -101,7 +101,7 @@ static ERL_NIF_TERM kinit(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
 
   memset(&kebab.creds, 0, sizeof(krb5_creds));
 
-  // Create the principal name from user and /etc/krb5.conf
+  // Create the principal name from username and /etc/krb5.conf
   if ((kebab.error = krb5_parse_name(kebab.context, (char *)username.data, &kebab.principal)))
     return error_and_exit(env, &kebab, "krb5_parse_name");
 
