@@ -31,11 +31,6 @@
 #define KRB5KDC_ERR_KEY_EXPIRED KRB5KDC_ERR_KEY_EXP
 #endif
 
-void secure_zero(void *s, size_t n) {
-  volatile char *p = s;
-  while (n--) *p++ = 0;
-}
-
 struct kebab {
   krb5_error_code error;
   krb5_principal  principal;
@@ -48,17 +43,13 @@ struct kebab {
 ERL_NIF_TERM error_and_exit(ErlNifEnv* env, struct kebab *kebab, char *tag) {
   char fmt_error_msg[1024];
   const char * krb_error_msg = krb5_get_error_message(kebab->context, kebab->error);
-  secure_zero(fmt_error_msg, (int)sizeof(fmt_error_msg));
+  memset(fmt_error_msg, 0, (int)sizeof(fmt_error_msg));
   snprintf(fmt_error_msg, (int)sizeof(fmt_error_msg), "%s: (%i) %s", tag, kebab->error, krb_error_msg);
   ERL_NIF_TERM error_message = enif_make_string(env, fmt_error_msg, ERL_NIF_LATIN1);
   ERL_NIF_TERM return_atom;
 
   if (krb_error_msg != NULL)
     krb5_free_error_message(kebab->context, krb_error_msg);
-
-  // Zero out password securely since memset can get optimized away if compiled
-  // with -01 or higher and not being used afterwards.
-  secure_zero(kebab->password, kebab->password_size);
 
   if (kebab->error == 0)
      return_atom = enif_make_atom(env, "ok");
