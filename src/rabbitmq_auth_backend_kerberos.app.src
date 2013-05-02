@@ -6,4 +6,4 @@
   {env, [
       {authZ_module, rabbit_auth_backend_internal}
   ]},
-  {applications, [kernel, stdlib, inets]}]}.
+  {applications, [kernel, stdlib]}]}.
