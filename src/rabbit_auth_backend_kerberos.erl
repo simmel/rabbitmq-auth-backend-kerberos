@@ -54,7 +54,7 @@ check_user_login(Username, AuthProps) ->
     {ok, _ = #internal_user{password_hash = <<>>}} -> true;
     _ -> false
   end,
-  Wat = case Empty_password of
+  case Empty_password of
     true ->
       case Kinit of
         {ok, _} ->
@@ -69,9 +69,7 @@ check_user_login(Username, AuthProps) ->
       end;
     false ->
       {refused, "User '~s' exists in internal database, not authenticating user with Kerberos.", [Username]}
-  end,
-  rabbit_log:error("~p~n", [Wat]),
-  Wat.
+  end.
 
 check_vhost_access(#user{username = _}, _) ->
   true.
