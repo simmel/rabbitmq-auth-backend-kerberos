@@ -1,3 +1,4 @@
+RELEASABLE:=true
 DEPS:=rabbitmq-server rabbitmq-erlang-client
 
 C_SOURCE_DIR:=$(PACKAGE_DIR)/c_src
