@@ -54,7 +54,8 @@ ERL_NIF_TERM error_and_exit(ErlNifEnv* env, struct kebab *kebab, char *tag) {
   if (kebab->error == 0)
      return_atom = enif_make_atom(env, "ok");
   // FIXME This should be done in a better way
-  else if (kebab->error == KRB5KRB_AP_ERR_BAD_INTEGRITY ||
+  else if (kebab->error == KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN ||
+           kebab->error == KRB5KRB_AP_ERR_BAD_INTEGRITY ||
            kebab->error == KRB5KDC_ERR_PREAUTH_FAILED ||
            kebab->error == KRB5KDC_ERR_KEY_EXPIRED
           )
