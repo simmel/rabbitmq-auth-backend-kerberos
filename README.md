@@ -55,8 +55,11 @@ When ```libkrb5-dev``` and ```erlang-dev``` is installed:
 CFLAGS="-I/usr/lib/erlang/usr/include/ -DMIT" LDFLAGS="`krb5-config --libs krb5`" make dist
 ```
 
+Usage
+=====
+
 Enabling the plugin
-===================
+-------------------
 
 * Enable the plugin ```rabbitmq_auth_backend_kerberos```, see http://www.rabbitmq.com/plugins.html
 * To make RabbitMQ use the plugin, set the value of the ```auth_backends``` configuration item
@@ -71,6 +74,23 @@ look like this:
   [{auth_backends, [rabbit_auth_backend_kerberos, rabbit_auth_backend_internal]}]
  }].
 ```
+
+Adding the user
+---------------
+
+Now you must add the users that you want to be able to use Kerberos
+authentication to the local database:
+
+```sh
+$ rabbitmqctl add_user test temporary_password
+Creating user "test" ...
+...done.
+$ rabbitmqctl clear_password test
+Clearing password for user "test" ...
+...done.
+```
+
+See http://www.rabbitmq.com/management.html#permissions if you want the user to be able to access the management gui.
 
 Configuring the plugin
 ======================
