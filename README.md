@@ -21,8 +21,8 @@ Requirements
 You can build and install it like any other plugin (see
 http://www.rabbitmq.com/plugin-development.html).
 
-Headers for Heimdal or MIT Kerberos and Erlang are needed to build it. So on
-any Debian derived distro that's ```heimdal-dev``` or ```libkrb5-dev``` and ```erlang-dev```.
+Headers for Erlang and Heimdal or MIT Kerberos are needed to build it. So on
+any Debian derived distro that's ```erlang-dev``` and ```heimdal-dev``` or ```libkrb5-dev```.
 
 Compiling
 =========
