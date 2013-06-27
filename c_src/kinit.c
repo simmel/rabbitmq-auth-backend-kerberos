@@ -40,6 +40,14 @@ struct kebab {
   int             password_size;
 };
 
+ERL_NIF_TERM get_atom(ErlNifEnv* env, const char* atom_name)
+{
+    ERL_NIF_TERM atom;
+    if(enif_make_existing_atom(env, atom_name, &atom, ERL_NIF_LATIN1))
+        return atom;
+    return enif_make_atom(env, atom_name);
+}
+
 ERL_NIF_TERM error_and_exit(ErlNifEnv* env, struct kebab *kebab, char *tag) {
   char fmt_error_msg[1024];
   const char * krb_error_msg = krb5_get_error_message(kebab->context, kebab->error);
@@ -52,16 +60,16 @@ ERL_NIF_TERM error_and_exit(ErlNifEnv* env, struct kebab *kebab, char *tag) {
     krb5_free_error_message(kebab->context, krb_error_msg);
 
   if (kebab->error == 0)
-     return_atom = enif_make_atom(env, "ok");
+     return_atom = get_atom(env, "ok");
   // FIXME This should be done in a better way
   else if (kebab->error == KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN ||
            kebab->error == KRB5KRB_AP_ERR_BAD_INTEGRITY ||
            kebab->error == KRB5KDC_ERR_PREAUTH_FAILED ||
            kebab->error == KRB5KDC_ERR_KEY_EXPIRED
           )
-     return_atom = enif_make_atom(env, "refused");
+     return_atom = get_atom(env, "refused");
   else
-    return_atom = enif_make_atom(env, "error");
+    return_atom = get_atom(env, "error");
 
   if (kebab->context) {
     if (&kebab->creds)
