@@ -11,7 +11,8 @@ down how to use a different module for authZ.
 
 This plugin will use your systems Kerberos settings.
 
-NOTE: This plugin will only work on >3.x!
+NOTE: This plugin will only work on >3.5.x!
+For >3.x && <3.5.x use versios 1.x.
 
 The plugin is BSD-licensed.
 
