@@ -37,9 +37,9 @@ So e.g:
 
 Mac OS X
 --------
-When using Heimdal from http://www.h5l.org and erlang from [Homebrew](http://brew.sh):
+When using `heimdal` and `erlang` from [Homebrew](http://brew.sh):
 ```sh
-CFLAGS="-I/usr/heimdal/include -I/usr/local/Cellar/erlang/R15B02/lib/erlang/usr/include/" LDFLAGS="-L/usr/heimdal/lib -lkrb5 -undefined dynamic_lookup -dynamiclib" make
+CFLAGS="-I/usr/local/opt/heimdal/include -I/usr/local/opt/erlang/lib/erlang/usr/include/" LDFLAGS="-L/usr/local/opt/heimdal/lib -lkrb5 -undefined dynamic_lookup -dynamiclib" make
 ```
 
 Ubuntu 12.04 Precise
