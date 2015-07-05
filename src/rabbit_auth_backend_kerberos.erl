@@ -38,8 +38,8 @@
 -on_load(init/0).
 
 init() ->
-    Kinit = filename:join(code:priv_dir(?APPLICATION), "kinit"),
-    erlang:load_nif(Kinit, 0).
+  Kinit = filename:join(code:priv_dir(?APPLICATION), "kinit"),
+  erlang:load_nif(Kinit, 0).
 
 kinit(_, _) -> exit(nif_library_not_loaded).
 
