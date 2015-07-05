@@ -35,7 +35,15 @@
 -define(APPLICATION, begin {ok, A} = application:get_application(?MODULE), A end).
 
 -export([init/0, kinit/2, description/0, user_login_authentication/2]).
--on_load(init/0).
+
+-rabbit_boot_step(
+  {?MODULE,
+   [{description, "RabbitMQ Kerberos Authentication Backend"},
+    {mfa,         {?MODULE, init,
+                   []}},
+    {requires,    rabbit_registry},
+    {enables,     kernel_ready}]}).
+
 
 init() ->
   Kinit = filename:join(code:priv_dir(?APPLICATION), "kinit"),
@@ -50,28 +58,13 @@ description() ->
 user_login_authentication(Username, AuthProps) ->
   Password = proplists:get_value(password, AuthProps),
   Kinit = kinit(Username, Password),
-  {ok, AuthZ_module} = application:get_env(?APPLICATION, authZ_module),
-  User_record = AuthZ_module:lookup_user(Username),
-  Tags = case User_record of
-    {ok, _ = #internal_user{tags = T}} -> T;
-    _ -> []
-  end,
-  Empty_password = case User_record of
-    {ok, _ = #internal_user{password_hash = <<>>}} -> true;
-    _ -> false
-  end,
-  case Empty_password of
-    true ->
-      case Kinit of
-        {ok, _} ->
-          {ok, #auth_user{username     = Username,
-              tags         = Tags,
-              impl         = none}};
-        {refused, Error} ->
-          {refused, Error, []};
-        Error ->
-          Error
-      end;
-    false ->
-      {refused, "User '~s' exists in internal database, not authenticating user with Kerberos.", [Username]}
+  case Kinit of
+    {ok, _} ->
+      {ok, #auth_user{username     = Username,
+                      tags         = [],
+                      impl         = none}};
+    {refused, Error} ->
+      {refused, Error, []};
+    Error ->
+      Error
   end.
