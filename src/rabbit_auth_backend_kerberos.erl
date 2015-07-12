@@ -58,13 +58,27 @@ description() ->
 user_login_authentication(Username, AuthProps) ->
   Password = proplists:get_value(password, AuthProps),
   Kinit = kinit(Username, Password),
-  case Kinit of
-    {ok, _} ->
-      {ok, #auth_user{username     = Username,
-                      tags         = [],
-                      impl         = none}};
-    {refused, Error} ->
-      {refused, Error, []};
-    Error ->
-      Error
+  User_record = rabbit_auth_backend_internal:lookup_user(Username),
+  Tags = case User_record of
+    {ok, _ = #internal_user{tags = T}} -> T;
+    _ -> []
+  end,
+  Empty_password = case User_record of
+    {ok, _ = #internal_user{password_hash = <<>>}} -> true;
+    _ -> false
+  end,
+  case Empty_password of
+    true ->
+      case Kinit of
+        {ok, _} ->
+          {ok, #auth_user{username     = Username,
+              tags         = Tags,
+              impl         = none}};
+        {refused, Error} ->
+          {refused, Error, []};
+        Error ->
+          Error
+      end;
+    false ->
+      {refused, "User '~s' exists in internal database and has a password set, not authenticating user with Kerberos.", [Username]}
   end.
