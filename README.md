@@ -4,10 +4,9 @@ Overview
 This plugin provides the ability for your RabbitMQ server to perform
 authentication against an Kerberos KDC.
 
-Since Kerberos is a authentication protocol and cannot do authorization
-this plugin depends on another auth backend to provide authZ.
-By default it uses ```rabbit_auth_backend_internal``` for this. See further
-down how to use a different module for authZ.
+Since Kerberos is an authentication protocol and cannot do authorization this
+plugin depends on the user existing with the correct tags/roles in in internal
+user backend (until authzorisation has been properly fixed).
 
 This plugin will use your systems Kerberos settings.
 
@@ -92,28 +91,6 @@ Clearing password for user "test" ...
 ```
 
 See http://www.rabbitmq.com/management.html#permissions if you want the user to be able to access the management gui.
-
-Configuring the plugin
-======================
-
-authZ\_module
--------------
-
-Default: ```rabbit_auth_backend_internal```
-
-The RabbitMQ auth module which should handle the authorization.
-
-Example configuration file
-==========================
-
-```erlang
-[
-  {rabbit, [{auth_backends, [rabbit_auth_backend_kerberos]}]},
-  {rabbit_auth_backend_kerberos, [
-    {authZ_module, rabbit_auth_backend_internal}
-  ]}
-].
-```
 
 Acknowledgements
 ================
