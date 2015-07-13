@@ -30,7 +30,6 @@ Compiling
 The plugin works both with Heimdal and MIT Kerberos.
 
 You need to use `CFLAGS` and `LDFLAGS` when running make.
-When using MIT you need to add `-DMIT` too for it to work.
 
 So e.g:
 
@@ -43,16 +42,8 @@ CFLAGS="-I/usr/local/opt/heimdal/include -I/usr/local/opt/erlang/lib/erlang/usr/
 
 Ubuntu 12.04 Precise
 --------------------
-When `heimdal-dev` and `erlang-dev` is installed:
 ```sh
-CFLAGS="-I/usr/lib/erlang/usr/include/ `krb5-config --cflags`" LDFLAGS="`krb5-config --libs krb5`" make
-```
-
-OR for MIT Kerberos:
-
-When `libkrb5-dev` and `erlang-dev` is installed:
-```sh
-CFLAGS="-I/usr/lib/erlang/usr/include/ -DMIT" LDFLAGS="`krb5-config --libs krb5`" make
+CFLAGS="-I/usr/lib/erlang/usr/include/" LDFLAGS="`krb5-config --libs krb5`" make
 ```
 
 Usage
