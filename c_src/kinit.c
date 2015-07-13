@@ -27,7 +27,7 @@
 #include <string.h>
 
 // MIT is broken
-#ifdef MIT
+#ifdef KRB5_KRB5_H_INCLUDED
 #define KRB5KDC_ERR_KEY_EXPIRED KRB5KDC_ERR_KEY_EXP
 #endif
 
