@@ -118,6 +118,15 @@ static ERL_NIF_TERM kinit(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
           kebab.context, &kebab.creds, kebab.principal, (char *)password.data, 0, NULL, 0, NULL, NULL)))
     return error_and_exit(env, &kebab, "krb5_get_init_creds_password");
 
+  // Verify that AS_REP isn't spoofed
+  krb5_verify_init_creds_opt verify_options;
+  krb5_verify_init_creds_opt_init(&verify_options);
+  krb5_verify_init_creds_opt_set_ap_req_nofail(&verify_options, 1);
+
+  if ((kebab.error = krb5_verify_init_creds(
+          kebab.context, &kebab.creds, NULL, NULL, NULL, &verify_options)))
+    return error_and_exit(env, &kebab, "krb5_verify_init_creds");
+
   return error_and_exit(env, &kebab, NULL);
 }
 
