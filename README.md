@@ -11,7 +11,7 @@ user backend (until authzorisation has been properly fixed).
 This plugin will use your systems Kerberos settings.
 
 NOTE: This plugin will only work on >3.5.x!
-For >3.x && <3.5.x use versions 1.x.
+For >3.3.x && <3.5.x use versions 1.x.
 
 The plugin is BSD-licensed.
 
