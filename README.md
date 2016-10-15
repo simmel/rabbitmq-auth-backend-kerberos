@@ -1,8 +1,9 @@
 Overview
 ========
 
-This plugin provides the ability for your RabbitMQ server to perform
-authentication against an Kerberos KDC.
+This plugin provides the ability for your RabbitMQ server authenticate users
+against a Kerberos KDC using the password sent to the RabbitMQ server as part
+of normal connection.
 
 Since Kerberos is an authentication protocol and cannot do authorization this
 plugin depends on the user existing with the correct tags/roles in in internal
