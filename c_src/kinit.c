@@ -40,6 +40,10 @@ struct kebab {
   int             password_size;
 };
 
+ERL_NIF_TERM get_atom(ErlNifEnv*, const char*);
+ERL_NIF_TERM error_and_exit(ErlNifEnv*, struct kebab *, char *);
+int noop(ErlNifEnv*, void**, void**, ERL_NIF_TERM);
+
 ERL_NIF_TERM get_atom(ErlNifEnv* env, const char* atom_name)
 {
     ERL_NIF_TERM atom;

@@ -11,8 +11,9 @@ user backend (until authzorisation has been properly fixed).
 
 This plugin will use your systems Kerberos settings.
 
-NOTE: This plugin will only work on >3.5.x!
+NOTE: This plugin will only work on >3.7.x!
 For >3.3.x && <3.5.x use versions 1.x.
+For >3.5.x && <3.7.x use versions 2.x.
 
 The plugin is BSD-licensed.
 
@@ -30,21 +31,19 @@ Compiling
 
 The plugin works both with Heimdal and MIT Kerberos.
 
-You need to use `CFLAGS` and `LDFLAGS` when running make.
-
 So e.g:
 
 Mac OS X
 --------
 When using `heimdal` and `erlang` from [Homebrew](http://brew.sh):
 ```sh
-CFLAGS="-I/usr/local/opt/heimdal/include -I/usr/local/opt/erlang/lib/erlang/usr/include/" LDFLAGS="-L/usr/local/opt/heimdal/lib -lkrb5 -undefined dynamic_lookup -dynamiclib" make
+LDFLAGS="-undefined dynamic_lookup -dynamiclib" make dist
 ```
 
 Ubuntu 12.04 Precise
 --------------------
 ```sh
-CFLAGS="-I/usr/lib/erlang/usr/include/" LDFLAGS="`krb5-config --libs krb5`" make
+make dist
 ```
 
 Usage
@@ -54,12 +53,20 @@ Enabling the plugin
 -------------------
 
 * Enable the plugin `rabbitmq_auth_backend_kerberos`, see http://www.rabbitmq.com/plugins.html
-* To make RabbitMQ use the plugin, set the value of the `auth_backends` configuration item
-for the `rabbit` application to include `rabbit_auth_backend_kerberos`.
-`auth_backends` is a list of authentication providers to try in order.
+* To make RabbitMQ use the plugin, add `kerberos` to the `auth_backends` list of authentication providers to try in order.
 
 Therefore a complete RabbitMQ configuration that enables this plugin would
 look like this:
+
+In `rabbitmq.conf`:
+
+```ini
+auth_backends.1.authn = rabbit_auth_backend_kerberos
+auth_backends.1.authz = rabbit_auth_backend_internal
+auth_backends.2 = rabbit_auth_backend_internal
+```
+
+or in `advanced.config`:
 
 ```erlang
 [{rabbit,

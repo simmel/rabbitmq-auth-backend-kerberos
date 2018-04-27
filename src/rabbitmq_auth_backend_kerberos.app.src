@@ -1,9 +1,0 @@
-{application, rabbitmq_auth_backend_kerberos,
-  [{description, "RabbitMQ Kerberos Authentication Backend"},
-  {vsn, "%%VSN%%"},
-  {modules, []},
-  {registered, []},
-  {env, [
-      {authZ_module, rabbit_auth_backend_internal}
-  ]},
-  {applications, [kernel, stdlib, rabbit]}]}.
