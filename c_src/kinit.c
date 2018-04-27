@@ -36,6 +36,7 @@ struct kebab {
   krb5_principal  principal;
   krb5_context    context;
   krb5_creds      creds;
+  krb5_get_init_creds_opt *opt;
   char           *password;
   int             password_size;
 };
@@ -116,6 +117,15 @@ static ERL_NIF_TERM kinit(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   // Create the principal name from username and /etc/krb5.conf
   if ((kebab.error = krb5_parse_name(kebab.context, (char *)username.data, &kebab.principal)))
     return error_and_exit(env, &kebab, "krb5_parse_name");
+
+  // Create opt
+  if ((kebab.error = krb5_get_init_creds_opt_alloc(kebab.context, &kebab.opt)))
+    return error_and_exit(env, &kebab, "krb5_get_init_creds_opt_alloc");
+
+  // Enable FAST
+  if ((kebab.error = krb5_get_init_creds_opt_set_fast_flags(
+          kebab.context, kebab.opt, KRB5_FAST_REQUIRED)))
+    return error_and_exit(env, &kebab, "krb5_get_init_creds_opt_set_fast_flags");
 
   // Do kinit
   if ((kebab.error = krb5_get_init_creds_password(
