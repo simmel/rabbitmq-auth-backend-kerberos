@@ -1,7 +1,10 @@
 *.d
+*.plt
 .erlang.mk/
 c_src/env.mk
 deps/
 ebin/
+escript/
 plugins/
 priv/
+sbin/
