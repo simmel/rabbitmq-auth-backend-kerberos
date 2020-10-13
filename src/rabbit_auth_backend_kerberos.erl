@@ -58,14 +58,13 @@ description() ->
 user_login_authentication(Username, AuthProps) ->
   Password = proplists:get_value(password, AuthProps),
   Kinit = kinit(Username, Password),
-  User_record = rabbit_auth_backend_internal:lookup_user(Username),
-  Tags = case User_record of
-    {ok, _ = #internal_user{tags = T}} -> T;
-    _ -> []
-  end,
-  Empty_password = case User_record of
-    {ok, _ = #internal_user{password_hash = <<>>}} -> true;
-    _ -> false
+  Ret = rabbit_auth_backend_internal:lookup_user(Username),
+  {Tags, Empty_password} = case Ret of
+    {ok, User_record} ->
+      {internal_user:get_tags(User_record),
+       internal_user:get_password_hash(User_record) =:= <<>>};
+    _ ->
+      {[], false}
   end,
   case Empty_password of
     true ->
